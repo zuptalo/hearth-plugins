@@ -9,7 +9,7 @@ contract in Hearth's [`docs/plugins/CONTRACT.md`](https://github.com/zuptalo/hea
 
 | Plugin | What it brings | Status |
 |---|---|---|
-| `weather` | Weather in the top bar and on its own screen | planned (first) |
+| `weather` | Weather in the top bar and on its own screen | released |
 | `tmdb` | Trailers and clips for films and series | planned |
 | `homeassistant` | Your smart home on the TV | planned |
 | `homeassistant-bridge` | The TV in Home Assistant (with the `hearth_tv` integration) | planned |

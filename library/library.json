@@ -1,0 +1,35 @@
+{
+  "library": {
+    "id": "hearth-official",
+    "name": "Hearth TV",
+    "publisher": "Zuptalo",
+    "key": "ec-p256:c5d22db41493413ff195c9e110ee3c7500627698d1202397c7c37f239956b49d",
+    "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkGf/GCfBdKbN9nKE5tA2d9iUCQ278piLo1JP9ly+Pm3wLU24jBq37TE4SHnMs9mcHcKpuYJZ/13zm6kt3tsRfg==",
+    "prefix": "dev.hearth.plugin."
+  },
+  "seq": 2,
+  "generated": "2026-11-11T20:57:53Z",
+  "plugins": [
+    {
+      "id": "weather",
+      "name": "Weather",
+      "summary": "The weather in the top bar and on its own screen: SMHI in the Nordic area, Open-Meteo elsewhere",
+      "api": 1,
+      "minHost": 1,
+      "color": "#F5B841",
+      "provides": [
+        "weather"
+      ],
+      "capabilities": [],
+      "ratesContent": true,
+      "package": "dev.hearth.plugin.weather",
+      "versionCode": 2,
+      "version": "1.0.1",
+      "size": 25140,
+      "sha256": "e7da420f3a8b8103e20e736f6697d49c3ec8e743ae7a43ad9390f1ac721fbbcb",
+      "signer": "b13a6af1cd23ada94e2adf2ccd4eccbed4bf54352318e09dba5b1f546e455e2c",
+      "url": "https://github.com/zuptalo/hearth-plugins/releases/download/weather-1.0.1/weather-1.0.1.apk",
+      "logo": "https://github.com/zuptalo/hearth-plugins/releases/download/weather-1.0.1/weather.png"
+    }
+  ]
+}
