@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="dev.hearth.plugin.tmdb">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Lets the plugin check who's calling (Hearth TV) on Android 11 and newer. -->
+    <queries>
+        <package android:name="dev.hearth" />
+    </queries>
+
+    <uses-feature android:name="android.software.leanback" android:required="false" />
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+
+    <application
+        android:label="Trailers for Hearth TV"
+        android:icon="@drawable/logo"
+        android:allowBackup="false"
+        android:hasCode="true">
+        <provider
+            android:name=".TmdbPlugin"
+            android:authorities="dev.hearth.plugin.tmdb.hearth"
+            android:icon="@drawable/logo"
+            android:label="Trailers"
+            android:exported="true">
+            <intent-filter><action android:name="dev.hearth.action.PLUGIN" /></intent-filter>
+            <meta-data android:name="dev.hearth.plugin" android:resource="@xml/hearth_plugin" />
+        </provider>
+    </application>
+</manifest>

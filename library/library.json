@@ -7,9 +7,31 @@
     "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkGf/GCfBdKbN9nKE5tA2d9iUCQ278piLo1JP9ly+Pm3wLU24jBq37TE4SHnMs9mcHcKpuYJZ/13zm6kt3tsRfg==",
     "prefix": "dev.hearth.plugin."
   },
-  "seq": 2,
-  "generated": "2026-11-11T20:57:53Z",
+  "seq": 3,
+  "generated": "2026-11-11T21:43:25Z",
   "plugins": [
+    {
+      "id": "tmdb",
+      "name": "Trailers",
+      "summary": "Official trailers, clips and behind-the-scenes videos for your films and series, from TMDb (needs your free TMDb key)",
+      "api": 1,
+      "minHost": 1,
+      "color": "#3D5AFE",
+      "provides": [
+        "videos",
+        "settings"
+      ],
+      "capabilities": [],
+      "ratesContent": true,
+      "package": "dev.hearth.plugin.tmdb",
+      "versionCode": 1,
+      "version": "1.0.0",
+      "size": 21044,
+      "sha256": "ba9678cbd513425d9a60f3068dc98681839b71f034216619208801f321c73aac",
+      "signer": "b13a6af1cd23ada94e2adf2ccd4eccbed4bf54352318e09dba5b1f546e455e2c",
+      "url": "https://github.com/zuptalo/hearth-plugins/releases/download/tmdb-1.0.0/tmdb-1.0.0.apk",
+      "logo": "https://github.com/zuptalo/hearth-plugins/releases/download/tmdb-1.0.0/tmdb.png"
+    },
     {
       "id": "weather",
       "name": "Weather",

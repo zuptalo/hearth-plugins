@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin xmlns:hearth="http://hearth.dev/plugin"
+    hearth:id="tmdb"
+    hearth:name="Trailers"
+    hearth:api="1"
+    hearth:minHost="1"
+    hearth:logo="@drawable/logo"
+    hearth:color="#3D5AFE"
+    hearth:provides="videos,settings"
+    hearth:ratesContent="true"
+    hearth:capabilities="" />
