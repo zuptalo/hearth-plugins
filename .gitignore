@@ -8,7 +8,7 @@ libs/
 *.p12
 *.pem
 *.key
-password.txt
+*password*.txt
 local.properties
 .env
 .env.*

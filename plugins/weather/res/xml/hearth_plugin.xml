@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin xmlns:hearth="http://hearth.dev/plugin"
+    hearth:id="weather"
+    hearth:name="Weather"
+    hearth:api="1"
+    hearth:minHost="1"
+    hearth:logo="@drawable/logo"
+    hearth:color="#F5B841"
+    hearth:provides="weather"
+    hearth:ratesContent="true"
+    hearth:capabilities="" />
