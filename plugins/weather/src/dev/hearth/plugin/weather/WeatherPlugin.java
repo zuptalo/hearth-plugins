@@ -75,7 +75,23 @@ public final class WeatherPlugin extends PluginProvider {
         }
     }
 
-    private JSONObject forecast(String zone) throws Exception {
+    // The last answer, kept in memory: reading and decoding SMHI's forecast takes ~100 ms on a TV.
+    private String keptZone;
+    private JSONObject kept;
+    private long keptAt;
+
+    private synchronized JSONObject forecast(String zone) throws Exception {
+        long now = System.currentTimeMillis();
+        // Reused within the same hour (the list starts at the current hour) and while fresh.
+        if (kept != null && zone.equals(keptZone) && now - keptAt < FRESH_MS && now / 3_600_000 == keptAt / 3_600_000) return kept;
+        JSONObject out = build(zone);
+        keptZone = zone;
+        kept = out;
+        keptAt = now;
+        return out;
+    }
+
+    private JSONObject build(String zone) throws Exception {
         Forecast f = load(TimeZone.getTimeZone(zone), zone);
         if (f == null || f.hours.isEmpty()) throw new PluginException(PluginException.OFFLINE, "No forecast");
         JSONArray hours = new JSONArray(), days = new JSONArray();
