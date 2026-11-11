@@ -6,6 +6,6 @@
     hearth:minHost="1"
     hearth:logo="@drawable/logo"
     hearth:color="#F5B841"
-    hearth:provides="weather"
+    hearth:provides="weather,settings"
     hearth:ratesContent="true"
     hearth:capabilities="" />
