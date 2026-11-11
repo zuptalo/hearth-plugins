@@ -1,0 +1,22 @@
+name: Guardrails
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  secrets-and-identity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Scan for secrets (gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit identities and messages
+        run: |
+          bad=$(git log --format='%ae %ce' | tr ' ' '\n' | sort -u | grep -v '@users.noreply.github.com$' || true)
+          if [ -n "$bad" ]; then echo "Commits must use GitHub no-reply addresses: $bad"; exit 1; fi
+          if git log --format=%B | grep -qiE '^Claude-Session:|claude\.ai/code/session_'; then echo "Private session links in commit messages"; exit 1; fi

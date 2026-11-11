@@ -1,0 +1,15 @@
+build/
+keystore/
+.DS_Store
+libs/
+# Secrets and signing material never belong in the repository
+*.keystore
+*.jks
+*.p12
+*.pem
+*.key
+password.txt
+local.properties
+.env
+.env.*
+*.bundle

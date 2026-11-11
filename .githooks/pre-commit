@@ -1,0 +1,24 @@
+#!/bin/sh
+# Hearth TV guardrails, run before every commit (enable once: sh scripts/setup-hooks.sh).
+fail() { echo "pre-commit: $1" >&2; exit 1; }
+
+# 1. Author and committer: Zuptalo's no-reply address only.
+for who in "$(git var GIT_AUTHOR_IDENT)" "$(git var GIT_COMMITTER_IDENT)"; do
+  case "$who" in
+    *"@users.noreply.github.com>"*) ;;
+    *) fail "use a GitHub no-reply address for commits (git config user.email <id>+<name>@users.noreply.github.com)";;
+  esac
+done
+
+# 2. No signing material or secret files.
+git diff --cached --name-only --diff-filter=ACMR | grep -E '(\.keystore|\.jks|\.p12|\.pem|\.key|password\.txt|local\.properties|(^|/)\.env(\..*)?)$' \
+  && fail "signing keys, passwords and env files stay out of the repository"
+
+# 3. Nothing that looks like a secret in the added lines.
+git diff --cached -U0 --no-color | grep -E '^\+' | grep -nE \
+  'AIza[0-9A-Za-z_-]{30,}|ghp_[0-9A-Za-z]{30,}|github_pat_[0-9A-Za-z_]{40,}|sk-[A-Za-z0-9]{24,}|xox[baprs]-[0-9A-Za-z-]{10,}|-----BEGIN [A-Z ]*PRIVATE KEY-----|eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}\.' \
+  && fail "that looks like a key or token: keep it on the device or in a local, ignored file"
+
+# 4. gitleaks, when installed, for everything else.
+if command -v gitleaks >/dev/null 2>&1; then gitleaks protect --staged --no-banner -q || fail "gitleaks found a possible secret"; fi
+exit 0

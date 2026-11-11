@@ -1,0 +1,5 @@
+#!/bin/sh
+# No links to private chat sessions in commit messages (the history is public).
+if grep -qiE '^Claude-Session:|claude\.ai/code/session_' "$1"; then
+  echo "commit-msg: remove the Claude-Session line (keep Co-Authored-By if you like)" >&2; exit 1
+fi
