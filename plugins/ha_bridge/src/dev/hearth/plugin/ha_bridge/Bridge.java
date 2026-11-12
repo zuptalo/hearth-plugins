@@ -333,13 +333,19 @@ final class Bridge {
         e.put(entity("profile", "sensor", "Profile", "mdi:account"));
         JSONObject screen = entity("screen", "sensor", "Screen", "mdi:monitor");
         screen.getJSONObject("meta").put("device_class", "enum").put("options", new JSONArray().put("none").put("home")
-                .put("player").put("now_playing").put("music").put("profiles").put("settings").put("other"));
+                .put("player").put("now_playing").put("music").put("profiles").put("settings").put("weather").put("youtube")
+                .put("smart_home").put("other"));
         e.put(screen);
         JSONObject version = entity("version", "sensor", "Hearth version", "mdi:information-outline");
         version.getJSONObject("meta").put("entity_category", "diagnostic");
         e.put(version);
         e.put(entity("resume_episode", "button", "Continue the series", "mdi:television-classic").put("commands", new JSONArray().put("press")));
         e.put(entity("resume_movie", "button", "Continue the film", "mdi:movie-open").put("commands", new JSONArray().put("press")));
+        JSONObject remote = entity("remote", "remote", "Remote", "mdi:remote-tv");
+        remote.getJSONObject("meta").put("keys", new JSONArray().put("up").put("down").put("left").put("right").put("ok")
+                .put("back").put("home"));
+        remote.put("commands", new JSONArray().put("send"));
+        e.put(remote);
         JSONObject ev = entity("playback", "event", "Playback", "mdi:play-pause");
         ev.getJSONObject("meta").put("event_types", new JSONArray().put("started").put("paused").put("resumed").put("stopped"));
         e.put(ev);
@@ -396,6 +402,7 @@ final class Bridge {
         out.put("resume_episode", value(null));
         out.put("resume_movie", value(null));
         out.put("playback", value(null));
+        out.put("remote", value(true));
         return new JSONObject().put("entities", out);
     }
 
@@ -432,6 +439,9 @@ final class Bridge {
                     reply.put("playing", Host.call(app, "media.play", r).optJSONObject("playing"));
                     break;
                 }
+                case "remote/send":
+                    Host.call(app, "navigate.key", new JSONObject().put("key", args.optString("key")));
+                    break;
                 case "tv/open":
                     Host.call(app, "navigate.open", new JSONObject().put("screen", args.optString("screen")));
                     break;
@@ -468,6 +478,16 @@ final class Bridge {
             return Host.call(app, "media.search", new JSONObject().put("query", q.trim()).put("limit", n)).put("ok", true);
         } catch (PluginException e) {
             return new JSONObject().put("ok", false).put("code", e.code).put("reason", e.getMessage()).put("items", new JSONArray());
+        }
+    }
+
+    /** A picture of what plays or was found (JPEG bytes), or null. Through the TV: no key leaves it. */
+    byte[] art(String source, String id) {
+        try {
+            JSONObject r = Host.call(app, "media.art", new JSONObject().put("source", source == null ? "jellyfin" : source).put("id", id));
+            return android.util.Base64.decode(r.optString("data", ""), android.util.Base64.DEFAULT);
+        } catch (Exception e) {
+            return null;
         }
     }
 

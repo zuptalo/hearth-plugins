@@ -8,11 +8,12 @@ screen.
 - **API:** HTTP on the home network, port 47815, found as `_hearth-tv._tcp`. Private addresses
   only. `GET /api/hello`; pairing with `POST /api/pair` (the TV shows a code and asks, with the
   remote), then `GET /api/pair/<id>` for the token, once; `GET /api/describe`, `/api/state`,
-  `/api/events` (Server-Sent Events), `/api/search?q=`, `/api/browse?list=resume|next_up` and
-  `POST /api/command` with the token. Tokens are kept as hashes and never logged.
+  `/api/events` (Server-Sent Events), `/api/search?q=`, `/api/browse?list=resume|next_up`,
+  `/api/art?source=&id=` (a poster or cover, JPEG) and `POST /api/command` with the token. Tokens are kept as hashes and never logged.
 - **Entities it describes:** the TV (media player), "Show on TV" (notify), "Playing video" and
   "Playing music", "Now playing from", "Profile", "Screen", "Hearth version", "Continue the series"
-  and "Continue the film" (buttons), and "Playback" (event: started, paused, resumed, stopped).
+  and "Continue the film" (buttons), "Playback" (event: started, paused, resumed, stopped), and
+  "Remote" (arrows, OK, Back and Home on Hearth TV's own screens).
 - **Asks for:** `background`, `network.lan`, `ask`, `notices`, `playback.read`, `playback.control`,
   `navigate`, `profiles.read`, `controls.host` (contract §6). An adult allows them in Hearth TV's
   Settings → Plugins. Everything goes through Hearth TV, which keeps the profile's age limit.

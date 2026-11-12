@@ -115,6 +115,18 @@ final class Server {
                 case "GET /api/browse":
                     reply(out, 200, b.browse(query.get("list")));
                     return;
+                case "GET /api/art": {
+                    byte[] img = b.art(query.get("source"), query.get("id"));
+                    if (img == null || img.length == 0) {
+                        reply(out, 404, err("no picture"));
+                        return;
+                    }
+                    out.write(("HTTP/1.1 200 OK\r\nContent-Type: image/jpeg\r\nContent-Length: " + img.length
+                            + "\r\nCache-Control: max-age=3600\r\nConnection: close\r\n\r\n").getBytes(StandardCharsets.US_ASCII));
+                    out.write(img);
+                    out.flush();
+                    return;
+                }
                 case "POST /api/command":
                     reply(out, 200, b.command(req.optString("entity"), req.optString("command"), req.optJSONObject("args")));
                     return;
