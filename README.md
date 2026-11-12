@@ -12,7 +12,7 @@ contract in Hearth's [`docs/plugins/CONTRACT.md`](https://github.com/zuptalo/hea
 | `weather` | Weather in the top bar and on its own screen | released |
 | `tmdb` | Trailers and clips for films and series | released |
 | `homeassistant` | Your smart home on the TV | planned |
-| `homeassistant-bridge` | The TV in Home Assistant (with the `hearth_tv` integration) | planned |
+| `ha_bridge` | The TV in Home Assistant (with the `hearth_tv` integration) | built, being tested |
 | `jellyfin` | Films, series and music from a Jellyfin server | planned |
 
 ## Layout

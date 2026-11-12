@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The TV in Home Assistant: what plays, play and pause, "carry on with the series", a film or a
+     song by name, notices on the screen. Each capability is allowed by an adult in Settings → Plugins. -->
+<plugin xmlns:hearth="http://hearth.dev/plugin"
+    hearth:id="ha_bridge"
+    hearth:name="Home Assistant bridge"
+    hearth:api="1"
+    hearth:minHost="1"
+    hearth:logo="@drawable/logo"
+    hearth:color="#18BCF2"
+    hearth:provides="bridge"
+    hearth:ratesContent="true"
+    hearth:capabilities="background,network.lan,ask,notices,playback.read,playback.control,navigate,profiles.read,controls.host" />

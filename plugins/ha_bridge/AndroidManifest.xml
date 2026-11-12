@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="dev.hearth.plugin.ha_bridge">
+
+    <!-- The local API Home Assistant talks to (port 47815), and being found on the home network. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Lets the plugin check who's calling (Hearth TV), and call it back, on Android 11 and newer. -->
+    <queries>
+        <package android:name="dev.hearth" />
+    </queries>
+
+    <uses-feature android:name="android.software.leanback" android:required="false" />
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+
+    <application
+        android:label="Home Assistant bridge for Hearth TV"
+        android:icon="@drawable/logo"
+        android:allowBackup="false"
+        android:usesCleartextTraffic="true"
+        android:hasCode="true">
+        <provider
+            android:name=".BridgePlugin"
+            android:authorities="dev.hearth.plugin.ha_bridge.hearth"
+            android:icon="@drawable/logo"
+            android:label="Home Assistant bridge"
+            android:exported="true">
+            <intent-filter><action android:name="dev.hearth.action.PLUGIN" /></intent-filter>
+            <meta-data android:name="dev.hearth.plugin" android:resource="@xml/hearth_plugin" />
+        </provider>
+        <!-- Hearth TV binds this while it runs (capability "background"): the API lives here. -->
+        <service
+            android:name=".BridgeService"
+            android:exported="true">
+            <intent-filter><action android:name="dev.hearth.action.PLUGIN_SERVICE" /></intent-filter>
+        </service>
+    </application>
+</manifest>
