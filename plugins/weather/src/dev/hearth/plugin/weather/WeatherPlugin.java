@@ -358,8 +358,12 @@ public final class WeatherPlugin extends PluginProvider {
         });
         List<String> seen = new ArrayList<>();
         for (JSONObject r : list) {
-            String name = r.optString("name"), region = r.optString("admin1", ""), country = r.optString("country", "");
-            String detail = region.isEmpty() || region.equals(name) ? country : region + ", " + country;
+            String name = r.optString("name"), country = r.optString("country", "");
+            // "Västra Götalands län" → "Västra Götaland", "Västra Götaland County" → "Västra Götaland".
+            String region = r.optString("admin1", "").replaceAll("s? län$", "").replaceAll(" (County|kommun|fylke|maakunta|Region|Province)$", "");
+            // Short enough for the list beside the keys: the region at home, the country elsewhere.
+            boolean atHome = !home.isEmpty() && home.equalsIgnoreCase(r.optString("country_code"));
+            String detail = atHome && !region.isEmpty() && !region.equals(name) ? region : country;
             if (seen.contains(name + "|" + detail)) continue;
             seen.add(name + "|" + detail);
             out.put(new JSONObject().put("value", round(r.getDouble("latitude")) + "," + round(r.getDouble("longitude")) + "," + name)
