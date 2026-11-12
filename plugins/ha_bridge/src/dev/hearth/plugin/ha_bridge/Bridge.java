@@ -391,7 +391,8 @@ final class Bridge {
         boolean playing = "playing".equals(st) || "buffering".equals(st);
         boolean video = !"music".equals(where) && ("movie".equals(kind) || "episode".equals(kind) || "video".equals(kind));
         JSONObject out = new JSONObject();
-        out.put("tv", new JSONObject().put("available", true).put("value", st).put("attributes", a));
+        boolean on = s.optBoolean("on", true);
+        out.put("tv", new JSONObject().put("available", true).put("value", on ? st : "off").put("attributes", a));
         out.put("playing_video", value(playing && video));
         out.put("playing_music", value(playing && ("music".equals(kind) || "musicvideo".equals(kind))));
         out.put("source", value("idle".equals(st) ? "none" : s.optString("source", "none")));
@@ -402,7 +403,7 @@ final class Bridge {
         out.put("resume_episode", value(null));
         out.put("resume_movie", value(null));
         out.put("playback", value(null));
-        out.put("remote", value(true));
+        out.put("remote", value(on));
         return new JSONObject().put("entities", out);
     }
 
@@ -605,7 +606,7 @@ final class Bridge {
         String st = tvState.optString("value", "idle");
         JSONObject a = tvState.optJSONObject("attributes");
         String title = a == null ? "" : a.optString("media_series_title", a.optString("media_title", ""));
-        String now = "buffering".equals(st) ? "playing" : st;
+        String now = "buffering".equals(st) ? "playing" : "off".equals(st) ? "idle" : st;
         String type = null;
         if (!now.equals(lastPlayback) || (!"idle".equals(now) && !title.equals(lastTitle))) {
             if ("playing".equals(now)) type = "paused".equals(lastPlayback) && title.equals(lastTitle) ? "resumed" : "started";
