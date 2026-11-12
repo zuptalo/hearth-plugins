@@ -6,6 +6,10 @@
     hearth:minHost="1"
     hearth:logo="@drawable/logo"
     hearth:color="#F5B841"
-    hearth:provides="weather,settings"
+    hearth:provides="weather,settings,actions"
     hearth:ratesContent="true"
-    hearth:capabilities="" />
+    hearth:capabilities="">
+    <!-- Buttons (contract §3.7): a suggested one, and alternatives for when it's taken. -->
+    <action hearth:id="forecast" hearth:label="The forecast" hearth:scope="everywhere"
+        hearth:key="GUIDE" hearth:alternatives="TV_TELETEXT,LAST_CHANNEL,BOOKMARK" />
+</plugin>

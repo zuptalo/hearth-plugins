@@ -35,6 +35,8 @@ import java.util.concurrent.TimeUnit;
  * - {@code settings.get} → {@code {fields[{id:"apiKey", kind:"secret", label, set}]}}
  * - {@code settings.set} {@code {values:{apiKey}}} → {@code {}}, after TMDb accepts it (empty removes it).
  * - {@code migrate.import} {@code {values:{apiKey}}}: the key Hearth TV kept before this plugin.
+ * - {@code actions.run} {@code {id:"trailer", context:{tmdb, kind}}} → {@code {play:{youtube}}}: its button on a
+ *   film's or series' page (suggested: the red button), the title's first official trailer.
  */
 public final class TmdbPlugin extends PluginProvider {
     private static final String TAG = "Tmdb";
@@ -53,7 +55,7 @@ public final class TmdbPlugin extends PluginProvider {
         switch (method) {
             case "describe":
                 return new JSONObject().put("name", "Trailers").put("api", API)
-                        .put("provides", new JSONArray().put("videos").put("settings")).put("configured", key() != null);
+                        .put("provides", new JSONArray().put("videos").put("settings").put("actions")).put("configured", key() != null);
             case "settings.get":
                 return new JSONObject().put("fields", new JSONArray().put(new JSONObject().put("id", "apiKey").put("kind", "secret")
                         .put("label", "TMDb API key or read access token").put("set", key() != null)));
@@ -63,6 +65,8 @@ public final class TmdbPlugin extends PluginProvider {
                 return setKey(request.optJSONObject("values"), false);
             case "videos.for":
                 return videos(request);
+            case "actions.run":
+                return action(request);
             default:
                 return null;
         }
@@ -82,6 +86,22 @@ public final class TmdbPlugin extends PluginProvider {
         prefs().edit().putString("key", k).apply();
         HearthLog.i(TAG, (k.startsWith("eyJ") ? "Read access token" : "API key") + (check ? " saved" : " brought over from Hearth TV"));
         return new JSONObject();
+    }
+
+    // ---- its button ------------------------------------------------------------------------------
+
+    private JSONObject action(JSONObject r) throws Exception {
+        if (!"trailer".equals(r.optString("id"))) throw new PluginException(PluginException.NOT_FOUND, "No such action");
+        JSONObject c = r.optJSONObject("context");
+        if (c == null || c.optString("tmdb").isEmpty()) return new JSONObject().put("notice", "Open a film or a series first");
+        JSONArray list = videos(new JSONObject().put("tmdb", c.optString("tmdb")).put("kind", c.optString("kind", "movie"))
+                .put("officialOnly", true)).getJSONArray("videos");
+        for (int i = 0; i < list.length(); i++) {
+            JSONObject v = list.getJSONObject(i);
+            if ("Trailer".equals(v.optString("type")) || "Teaser".equals(v.optString("type")))
+                return new JSONObject().put("play", new JSONObject().put("youtube", v.getString("youtubeId")));
+        }
+        return new JSONObject().put("notice", "No trailer for this one");
     }
 
     // ---- videos --------------------------------------------------------------------------------

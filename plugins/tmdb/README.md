@@ -9,6 +9,9 @@ Official trailers, clips and behind-the-scenes videos for films and series in He
 - **Provides:** `videos` (`videos.for`) and `settings` (`settings.get`, `settings.set`); takes a key
   Hearth TV kept before through `migrate.import`.
 
+**Button:** "Play the trailer" on a film's or series' page. It suggests Red, then Yellow, Record or
+Bookmark (`actions`, contract §3.7).
+
 This product uses the TMDB API but is not endorsed or certified by TMDB.
 
 Build: `bash scripts/build-plugin.sh tmdb`.

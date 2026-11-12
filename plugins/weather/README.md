@@ -13,5 +13,7 @@ The weather for Hearth TV's header and weather screen: now, the next hours and t
 - **Kept:** answers are reused for half an hour, in the plugin's own cache.
 - **Provides:** `weather` (method `weather.forecast`, see the contract §3.4) and `settings`
   (`settings.get`, `settings.search`, `settings.set`, §3.6).
+- **Button:** "The forecast", everywhere. It suggests Guide, then Text, Last channel or Bookmark
+  (`actions`, §3.7).
 
 Build: `bash scripts/build-plugin.sh weather`.

@@ -23,6 +23,9 @@ PW_FILE="${HEARTH_PLUGIN_KEY_PASS_FILE:-../hearth/keystore/hearth-plugins-passwo
 [ -f "$KS" ] || { echo "No signing key at $KS. Make your own with keytool and set HEARTH_PLUGIN_KEYSTORE." >&2; exit 1; }
 VERSION_CODE="${VERSION_CODE:-1}"; VERSION_NAME="${VERSION_NAME:-1.0.0}"
 
+# The declaration first (id, provides, buttons): the rules Hearth TV relies on, contract §2 and §3.7.
+python3 -I "$(dirname "$0")/library.py" check "$(basename "$P")"
+
 B="$P/build"; rm -rf "$B" && mkdir -p "$B/gen" "$B/classes" "$B/dex"
 "$BT/aapt2" compile --dir "$P/res" -o "$B/res.zip"
 "$BT/aapt2" link -o "$B/unsigned.apk" -I "$JAR" --manifest "$P/AndroidManifest.xml" --java "$B/gen" \

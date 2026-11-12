@@ -42,6 +42,7 @@ import java.util.TimeZone;
  * - {@code settings.search} {@code {field:"place", query}} → {@code {choices[{value, label, detail}]}};
  *   the first is always "where the TV is" (value "").
  * - {@code settings.set} {@code {values:{place}}}: a value from the search, or "" for where the TV is.
+ * - {@code actions.run} {@code {id:"forecast"}} → {@code {open:"weather"}}: its button (suggested: Guide).
  */
 public final class WeatherPlugin extends PluginProvider {
     private static final String TAG = "Weather";
@@ -79,7 +80,7 @@ public final class WeatherPlugin extends PluginProvider {
     protected JSONObject handle(String method, JSONObject request) throws Exception {
         switch (method) {
             case "describe":
-                return new JSONObject().put("name", "Weather").put("api", API).put("provides", new JSONArray().put("weather").put("settings"));
+                return new JSONObject().put("name", "Weather").put("api", API).put("provides", new JSONArray().put("weather").put("settings").put("actions"));
             case "weather.forecast":
                 return forecast(request.optString("timezone", TimeZone.getDefault().getID()));
             case "settings.get":
@@ -88,6 +89,9 @@ public final class WeatherPlugin extends PluginProvider {
                 return search(request.optString("query", ""), request.optString("locale", "en"));
             case "settings.set":
                 return choose(request.optJSONObject("values"));
+            case "actions.run": // its button (res/xml/hearth_plugin.xml): Hearth TV's forecast screen
+                if ("forecast".equals(request.optString("id"))) return new JSONObject().put("open", "weather");
+                throw new PluginException(PluginException.NOT_FOUND, "No such action");
             default:
                 return null;
         }

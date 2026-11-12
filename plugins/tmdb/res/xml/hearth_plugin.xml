@@ -6,6 +6,10 @@
     hearth:minHost="1"
     hearth:logo="@drawable/logo"
     hearth:color="#3D5AFE"
-    hearth:provides="videos,settings"
+    hearth:provides="videos,settings,actions"
     hearth:ratesContent="true"
-    hearth:capabilities="" />
+    hearth:capabilities="">
+    <!-- Buttons (contract §3.7): a suggested one, and alternatives for when it's taken. -->
+    <action hearth:id="trailer" hearth:label="Play the trailer" hearth:scope="details"
+        hearth:key="PROG_RED" hearth:alternatives="PROG_YELLOW,MEDIA_RECORD,BOOKMARK" />
+</plugin>

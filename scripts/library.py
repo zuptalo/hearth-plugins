@@ -3,6 +3,7 @@
 
     python3 -I scripts/library.py build      # library/library.json from the built APKs, signed
     python3 -I scripts/library.py publish    # releases for new plugin versions, then the catalogue
+    python3 -I scripts/library.py check <id> # a plugin's declaration (build-plugin.sh runs it)
 
 Build every plugin first (scripts/build-plugin.sh <id>). The catalogue lists each plugin's newest
 build: its version, size, sha256 and signing certificate, read from the APK itself. `seq` goes up
@@ -55,6 +56,37 @@ def apk_facts(apk):
             "size": len(body), "sha256": hashlib.sha256(body).hexdigest(), "signer": signers[0]}
 
 
+# Remote buttons (contract §3.7). Keys a plugin may suggest, as Android names them without KEYCODE_.
+SCOPES = {"everywhere", "home", "details", "player", "youtube", "music"}
+KEYS = {"PROG_RED", "PROG_GREEN", "PROG_YELLOW", "PROG_BLUE", "CHANNEL_UP", "CHANNEL_DOWN", "GUIDE", "CAPTIONS",
+        "MENU", "TV_TELETEXT", "LAST_CHANNEL", "MEDIA_RECORD", "BOOKMARK"} | {str(d) for d in range(10)}
+
+
+def actions(pid, x):
+    """The plugin's <action> elements, checked: every rule here is one Hearth TV relies on."""
+    out, problems = [], []
+    for a in x.findall("action"):
+        g = lambda k: (a.get(NS + k) or "").strip()
+        aid, label, scope, key = g("id"), g("label"), g("scope"), g("key")
+        alts = [k.strip() for k in g("alternatives").split(",") if k.strip()]
+        where = f"{pid}: action {aid or '?'}"
+        if not re.fullmatch(r"[a-z0-9_.]{1,40}", aid): problems.append(f"{where}: id must be [a-z0-9_.], up to 40")
+        if not label or len(label) > 40: problems.append(f"{where}: label must be 1-40 characters, said for people")
+        if scope not in SCOPES: problems.append(f"{where}: scope must be one of {sorted(SCOPES)}")
+        if key not in KEYS: problems.append(f"{where}: key {key!r} isn't one a plugin may suggest ({sorted(KEYS)})")
+        if len(alts) < 2: problems.append(f"{where}: give at least two alternatives, best first, for when {key} is taken")
+        for k in alts:
+            if k not in KEYS or k == key: problems.append(f"{where}: alternative {k!r} isn't allowed (or repeats the key)")
+        out.append({"id": aid, "label": label, "scope": scope, "key": key, "alternatives": alts})
+    if len(out) > 8: problems.append(f"{pid}: at most 8 actions")
+    if len({a["id"] for a in out}) != len(out): problems.append(f"{pid}: action ids must be unique")
+    if out and "actions" not in [p.strip() for p in (x.get(NS + "provides") or "").split(",")]:
+        problems.append(f"{pid}: has actions, so provides must include \"actions\" (and answer actions.run)")
+    if problems:
+        sys.exit("\n".join(problems))
+    return out
+
+
 def plugin_facts(pid):
     x = ET.parse(os.path.join(ROOT, "plugins", pid, "res", "xml", "hearth_plugin.xml")).getroot()
     a = lambda k, d="": x.get(NS + k, d)
@@ -63,7 +95,8 @@ def plugin_facts(pid):
     split = lambda s: [p.strip() for p in s.split(",") if p.strip()]
     return {"id": a("id"), "name": a("name"), "summary": extra["summary"], "api": int(a("api", "1")),
             "minHost": int(a("minHost", "1")), "color": a("color"), "provides": split(a("provides")),
-            "capabilities": split(a("capabilities")), "ratesContent": a("ratesContent") == "true"}
+            "capabilities": split(a("capabilities")), "ratesContent": a("ratesContent") == "true",
+            "actions": actions(pid, x)}
 
 
 def build():
@@ -140,5 +173,13 @@ def publish():
     print(f"Published library seq {doc['seq']}")
 
 
+def check():
+    """python3 -I scripts/library.py check <id>: the plugin's declaration, as build-plugin.sh runs it."""
+    if len(sys.argv) < 3:
+        sys.exit("check needs a plugin id")
+    plugin_facts(sys.argv[2])
+    print(f"{sys.argv[2]}: declaration OK")
+
+
 if __name__ == "__main__":
-    {"build": build, "publish": publish}.get(sys.argv[1] if len(sys.argv) > 1 else "", lambda: sys.exit(__doc__))()
+    {"build": build, "publish": publish, "check": check}.get(sys.argv[1] if len(sys.argv) > 1 else "", lambda: sys.exit(__doc__))()

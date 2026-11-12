@@ -15,5 +15,9 @@ Plugin specifics:
    children's profiles.
 5. Respect each service's terms of use. A plugin that doesn't belong in a public library
    goes to a private one.
-6. Releases are signed by the maintainer's plugin key, which is never in the repository (see the
+6. Remote buttons are offered, never taken. A plugin declares `<action>`s with a suggested
+   button and alternatives (Hearth's contract §3.7). Hearth asks the household before giving
+   one a button that's taken. `library.py check` (run by `build-plugin.sh`) enforces the rules.
+   Don't bypass it.
+7. Releases are signed by the maintainer's plugin key, which is never in the repository (see the
    `release-plugin` skill).

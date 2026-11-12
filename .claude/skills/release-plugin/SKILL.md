@@ -10,6 +10,9 @@ the maintainer (or in CI secrets) and are passed in by path or environment varia
 
 1. Build with a higher version: `VERSION_CODE=<n> VERSION_NAME=<x.y.z> bash scripts/build-plugin.sh <id>`.
    The signer printed must stay the same for every release of that plugin.
+   It runs `library.py check <id>` first. If that fails, fix the actions (contract §3.7); don't
+   skip the check. A release that changes an action's `id` loses the household's button for it,
+   so keep ids stable. Changing a suggested `key` only affects households that haven't placed it.
 2. `python3 -I scripts/library.py build`: writes `library/library.json` from the built APKs
    (version, size, sha256, signer), raises `seq`, signs it and verifies the signature.
 3. `python3 -I scripts/library.py publish`: makes a release `<id>-<version>` with the APK and logo
