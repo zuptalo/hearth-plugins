@@ -7,8 +7,8 @@
     "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEkGf/GCfBdKbN9nKE5tA2d9iUCQ278piLo1JP9ly+Pm3wLU24jBq37TE4SHnMs9mcHcKpuYJZ/13zm6kt3tsRfg==",
     "prefix": "dev.hearth.plugin."
   },
-  "seq": 3,
-  "generated": "2026-11-11T21:43:25Z",
+  "seq": 4,
+  "generated": "2026-11-12T04:29:53Z",
   "plugins": [
     {
       "id": "tmdb",
@@ -19,39 +19,68 @@
       "color": "#3D5AFE",
       "provides": [
         "videos",
-        "settings"
+        "settings",
+        "actions"
       ],
       "capabilities": [],
       "ratesContent": true,
+      "actions": [
+        {
+          "id": "trailer",
+          "label": "Play the trailer",
+          "scope": "details",
+          "key": "PROG_RED",
+          "alternatives": [
+            "PROG_YELLOW",
+            "MEDIA_RECORD",
+            "BOOKMARK"
+          ]
+        }
+      ],
       "package": "dev.hearth.plugin.tmdb",
-      "versionCode": 1,
-      "version": "1.0.0",
+      "versionCode": 2,
+      "version": "1.1.0",
       "size": 21044,
-      "sha256": "ba9678cbd513425d9a60f3068dc98681839b71f034216619208801f321c73aac",
+      "sha256": "fc5ec9ba920039e63d59707a51da163d16ec17d99b6499f357a642129fb73f1a",
       "signer": "b13a6af1cd23ada94e2adf2ccd4eccbed4bf54352318e09dba5b1f546e455e2c",
-      "url": "https://github.com/zuptalo/hearth-plugins/releases/download/tmdb-1.0.0/tmdb-1.0.0.apk",
-      "logo": "https://github.com/zuptalo/hearth-plugins/releases/download/tmdb-1.0.0/tmdb.png"
+      "url": "https://github.com/zuptalo/hearth-plugins/releases/download/tmdb-1.1.0/tmdb-1.1.0.apk",
+      "logo": "https://github.com/zuptalo/hearth-plugins/releases/download/tmdb-1.1.0/tmdb.png"
     },
     {
       "id": "weather",
       "name": "Weather",
-      "summary": "The weather in the top bar and on its own screen: SMHI in the Nordic area, Open-Meteo elsewhere",
+      "summary": "The weather in the top bar and on its own screen, for where the TV is or a place you choose: SMHI in the Nordic area, Open-Meteo elsewhere",
       "api": 1,
       "minHost": 1,
       "color": "#F5B841",
       "provides": [
-        "weather"
+        "weather",
+        "settings",
+        "actions"
       ],
       "capabilities": [],
       "ratesContent": true,
+      "actions": [
+        {
+          "id": "forecast",
+          "label": "The forecast",
+          "scope": "everywhere",
+          "key": "GUIDE",
+          "alternatives": [
+            "TV_TELETEXT",
+            "LAST_CHANNEL",
+            "BOOKMARK"
+          ]
+        }
+      ],
       "package": "dev.hearth.plugin.weather",
-      "versionCode": 2,
-      "version": "1.0.1",
+      "versionCode": 4,
+      "version": "1.2.0",
       "size": 25140,
-      "sha256": "e7da420f3a8b8103e20e736f6697d49c3ec8e743ae7a43ad9390f1ac721fbbcb",
+      "sha256": "45b8178c7724a11fb51e3076fd77da1b68bc633a5d9918644b244a075666ea45",
       "signer": "b13a6af1cd23ada94e2adf2ccd4eccbed4bf54352318e09dba5b1f546e455e2c",
-      "url": "https://github.com/zuptalo/hearth-plugins/releases/download/weather-1.0.1/weather-1.0.1.apk",
-      "logo": "https://github.com/zuptalo/hearth-plugins/releases/download/weather-1.0.1/weather.png"
+      "url": "https://github.com/zuptalo/hearth-plugins/releases/download/weather-1.2.0/weather-1.2.0.apk",
+      "logo": "https://github.com/zuptalo/hearth-plugins/releases/download/weather-1.2.0/weather.png"
     }
   ]
 }
