@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- The TV in Home Assistant: what plays, play and pause, "carry on with the series", a film or a
-     song by name, notices on the screen. Each capability is allowed by an adult in Settings → Plugins. -->
+     song by name, notices on the screen, and the asker's own profile opened when they ask from
+     their phone (profiles.open, only profiles that allow it). Each capability is allowed by an adult in Settings → Plugins. -->
 <plugin xmlns:hearth="http://hearth.dev/plugin"
     hearth:id="ha_bridge"
     hearth:name="Home Assistant bridge"
@@ -10,4 +11,4 @@
     hearth:color="#18BCF2"
     hearth:provides="bridge"
     hearth:ratesContent="true"
-    hearth:capabilities="background,network.lan,ask,notices,playback.read,playback.control,navigate,profiles.read,controls.host" />
+    hearth:capabilities="background,network.lan,ask,notices,playback.read,playback.control,navigate,profiles.read,profiles.open,controls.host" />

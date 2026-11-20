@@ -317,7 +317,7 @@ final class Bridge {
                 .put("screens", new JSONArray().put("home").put("music").put("now_playing").put("youtube").put("weather"));
         media.put("commands", new JSONArray().put("play").put("pause").put("toggle").put("stop").put("next").put("previous")
                 .put("forward").put("rewind").put("seek").put("volume_set").put("volume_mute").put("volume_up").put("volume_down")
-                .put("play_media").put("open"));
+                .put("play_media").put("open").put("open_profile"));
         e.put(media);
         e.put(entity("notify", "notify", "Show on TV", "mdi:message-text").put("commands", new JSONArray().put("show")));
         JSONObject watching = entity("playing_video", "binary_sensor", "Playing video", "mdi:movie-open-play");
@@ -440,6 +440,9 @@ final class Bridge {
                     reply.put("playing", Host.call(app, "media.play", r).optJSONObject("playing"));
                     break;
                 }
+                case "tv/open_profile": // Home Assistant vouches for who is asking; Hearth checks the profile allows it
+                    reply.put("profile", Host.call(app, "profiles.open", new JSONObject().put("name", args.optString("name"))));
+                    break;
                 case "remote/send":
                     Host.call(app, "navigate.key", new JSONObject().put("key", args.optString("key")));
                     break;
