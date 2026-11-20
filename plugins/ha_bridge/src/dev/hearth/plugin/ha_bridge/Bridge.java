@@ -435,7 +435,7 @@ final class Bridge {
                     break;
                 case "tv/play_media": {
                     JSONObject r = new JSONObject();
-                    for (String k : new String[]{"what", "id", "kind", "query", "artist", "season", "episode", "source", "fromStart"})
+                    for (String k : new String[]{"what", "id", "kind", "query", "artist", "season", "episode", "source", "fromStart", "back"})
                         if (args.has(k)) r.put(k, args.get(k));
                     reply.put("playing", Host.call(app, "media.play", r).optJSONObject("playing"));
                     break;
