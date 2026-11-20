@@ -317,7 +317,7 @@ final class Bridge {
                 .put("screens", new JSONArray().put("home").put("music").put("now_playing").put("youtube").put("weather"));
         media.put("commands", new JSONArray().put("play").put("pause").put("toggle").put("stop").put("next").put("previous")
                 .put("forward").put("rewind").put("seek").put("volume_set").put("volume_mute").put("volume_up").put("volume_down")
-                .put("play_media").put("open").put("open_profile"));
+                .put("play_media").put("handoff").put("open").put("open_profile"));
         e.put(media);
         e.put(entity("notify", "notify", "Show on TV", "mdi:message-text").put("commands", new JSONArray().put("show")));
         JSONObject watching = entity("playing_video", "binary_sensor", "Playing video", "mdi:movie-open-play");
@@ -435,11 +435,15 @@ final class Bridge {
                     break;
                 case "tv/play_media": {
                     JSONObject r = new JSONObject();
-                    for (String k : new String[]{"what", "id", "kind", "query", "artist", "season", "episode", "source", "fromStart", "back"})
+                    for (String k : new String[]{"what", "id", "kind", "query", "artist", "season", "episode", "source", "fromStart", "back",
+                            "handoff", "at", "playlist", "title", "channel", "music"})
                         if (args.has(k)) r.put(k, args.get(k));
                     reply.put("playing", Host.call(app, "media.play", r).optJSONObject("playing"));
                     break;
                 }
+                case "tv/handoff": // what plays, for another TV to carry on (tv/play_media what handoff)
+                    reply.put("handoff", Host.call(app, "media.handoff", new JSONObject()));
+                    break;
                 case "tv/open_profile": // Home Assistant vouches for who is asking; Hearth checks the profile allows it
                     reply.put("profile", Host.call(app, "profiles.open", new JSONObject().put("name", args.optString("name"))));
                     break;
